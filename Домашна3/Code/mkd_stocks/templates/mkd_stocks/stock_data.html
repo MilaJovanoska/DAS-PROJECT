@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Data</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #59a8c7;
+            color: white;
+            overflow-x: hidden;
+        }
+
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 10px;
+            height: 100px;
+            background-color: #59a8c7;
+            margin-bottom: 0;
+            box-shadow: none;
+            border-bottom: none;
+        }
+
+
+
+        .logo img {
+            height: 170px;
+            margin-right: 20px;
+        }
+
+
+        .menu {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 10px;
+        }
+
+        .menu li a {
+            text-decoration: none;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 8px 15px;
+            border: 2px solid white;
+            border-radius: 25px;
+            transition: 0.3s;
+        }
+
+        .menu li a:hover {
+            background-color: white;
+            color: #1B4965;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: white;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 10px;
+        }
+
+        .search-container input {
+            width: 80%;
+            max-width: 400px;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+
+        .search-container button {
+            padding: 10px 20px;
+            font-size: 14px;
+            background-color: #1B4965;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: 0.3s;
+        }
+
+        .search-container button:hover {
+            background-color: white;
+            color: #1B4965;
+        }
+
+        table {
+            width: 100%;
+            max-width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            word-break: break-word;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        th {
+            background-color: #1B4965;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #2D5D7E;
+            font-weight: bold;
+            font-size: 10px;
+
+        }
+
+        tr:nth-child(odd) {
+            background-color: #3f8eae;
+            font-weight: bold;
+            font-size: 10px;
+
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+            color: #2D5D7E;
+        }
+
+        #chartContainer {
+            width: 100%;
+            max-width: 90%;
+            margin: 20px auto;
+        }
+
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .menu {
+                flex-direction: column;
+                align-items: flex-start;
+                width: 100%;
+            }
+
+            .menu li {
+                margin: 5px 0;
+            }
+
+            .logo img {
+                height: 60px;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 6px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .search-container input {
+                width: 100%;
+                margin: 5px 0;
+            }
+
+            table {
+                font-size: 10px;
+            }
+
+            th, td {
+                padding: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <div class="logo">
+        <img src="{% static 'images/mkd_stock_spot_logo.png' %}" alt="MKD Stock Spot Logo">
+    </div>
+    <ul class="menu">
+        <li><a href="{% url 'index.html' %}" class="active">Home</a></li>
+        <li><a href="{% url 'about_us.html' %}">About us</a></li>
+        <li><a href="{% url 'stock_list' %}">News</a></li>
+        <li><a href="{% url 'sign_up.html' %}">Sign up</a></li>
+        <li><a href="{% url 'contact.html' %}">Contact</a></li>
+    </ul>
+</nav>
+<h1>Stock Prices</h1>
+<form class="search-container" method="get" action="">
+    <input type="text" name="query" id="search-bar" value="{{ query }}" placeholder="Search by issuer...">
+    <button type="submit">Search</button>
+</form>
+<table>
+    <thead>
+    <tr>
+        <th>Issuer</th>
+        <th>Date</th>
+        <th>Last Price</th>
+        <th>Max</th>
+        <th>Min</th>
+        <th>Average</th>
+        <th>Percent Change</th>
+        <th>Quantity</th>
+        <th>Best Trade</th>
+        <th>Total Trade</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if stocks %}
+        {% for stock in stocks %}
+            <tr>
+                <td>{{ stock.issuer }}</td>
+                <td>{{ stock.date }}</td>
+                <td>{{ stock.last_price }}</td>
+                <td>{{ stock.max }}</td>
+                <td>{{ stock.min }}</td>
+                <td>{{ stock.average }}</td>
+                <td>{{ stock.percent_change }}</td>
+                <td>{{ stock.quantity }}</td>
+                <td>{{ stock.best_trade }}</td>
+                <td>{{ stock.total_trade }}</td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan="10">No results found</td>
+        </tr>
+    {% endif %}
+    </tbody>
+</table>
+<div id="chartContainer">
+    <canvas id="stockChart" width="800" height="400"></canvas>
+</div>
+<script>
+    const graphData = {
+        dates: {% if graph_data %}[
+            {% for stock in graph_data %}"{{ stock.date }}"{% if not forloop.last %}, {% endif %}{% endfor %}]{% else %}
+            [] {% endif %},
+        lastPrices: {% if graph_data %}[
+            {% for stock in graph_data %}{{ stock.last_price }}{% if not forloop.last %}, {% endif %}{% endfor %}
+            ]{% else %}[] {% endif %}
+    };
+
+    const ctx = document.getElementById('stockChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: graphData.dates,
+            datasets: [
+                {
+                    label: 'Last Price',
+                    data: graphData.lastPrices,
+                    borderColor: 'yellow',
+                    backgroundColor: 'rgba(0, 123, 255, 0.2)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    pointBackgroundColor: '#2D5D7E',
+                    pointBorderColor: '#2D5D7E',
+                    pointRadius: 5,
+                    pointHoverRadius: 7
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Stock Price Trends Over Time',
+                    color: 'white',
+                    font: {
+                        size: 30,
+                        weight: 'bold',
+                        family: 'Arial'
+                    },
+                    padding: 20
+                },
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        color: 'white',
+                        font: {
+                            size: 14
+                        }
+                    }
+                },
+                tooltip: {
+                    enabled: true,
+                    backgroundColor: 'white',
+                    titleColor: 'white',
+                    bodyColor: 'white',
+                    borderColor: 'white',
+                    borderWidth: 1
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Date',
+                        color: 'white',
+                        font: {
+                            size: 20,
+                            weight: 'bold'
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.1)',
+                        lineWidth: 2,
+                        drawOnChartArea: true,
+                        drawTicks: false
+                    },
+                    ticks: {
+                        color: 'white',
+                        maxRotation: 45,
+                        minRotation: 0
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Last Price',
+                        color: 'white',
+                        font: {
+                            size: 20,
+                            weight: 'bold'
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.1)',
+                        lineWidth: 2,
+                        drawOnChartArea: true,
+                        drawTicks: false
+                    },
+                    ticks: {
+                        color: 'white',
+                    }
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>
