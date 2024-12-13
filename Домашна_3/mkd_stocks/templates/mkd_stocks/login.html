@@ -4,8 +4,8 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - MKD Stock Spot</title>
-    <link rel="stylesheet" href="{% static 'css/sign_up.css' %}">
+    <title>Log In - MKD Stock Spot</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
 </head>
 <body>
 <div id="dots-container"></div>
@@ -20,33 +20,22 @@
 </div>
 
 <div class="container">
-    <h1>HELLO!</h1>
-    <p>Please enter your details</p>
+    <h1>Welcome Back!</h1>
+    <p>Please log in to your account</p>
     <form method="post">
         {% csrf_token %}
-        <div class="form-grid">
-            <div class="form-column">
-                <label for="first_name">First Name</label>
-                <input type="text" id="first_name" name="first_name" placeholder="Enter your first name" required>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
 
-                <label for="last_name">Last Name</label>
-                <input type="text" id="last_name" name="last_name" placeholder="Enter your last name" required>
-            </div>
-            <div class="form-column">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="**********" required>
 
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="**********" required>
-            </div>
-        </div>
-
-        <button type="submit">Sign up</button>
+        <button type="submit">Log In</button>
     </form>
 
     <div class="existing-account">
-        <p>Already have an account?</p>
-        <a href="{% url 'login.html' %}" class="login-link">Log in to an existing account</a>
+        <p>Don't have an account?</p>
+        <a href="{% url 'sign_up.html' %}" class="signup-link">Sign up here</a>
     </div>
 </div>
 

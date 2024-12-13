@@ -36,5 +36,8 @@ def stock_list(request):
         'query': query
     })
 
+def login_view(request):
+    return render(request, 'mkd_stocks/login.html')
+
 
 

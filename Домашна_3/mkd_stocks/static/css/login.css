@@ -221,14 +221,14 @@ button:hover {
     color: white;
 }
 
-.login-link {
+.signup-link {
     text-decoration: none;
     color: #FFF;
     font-weight: bold;
     transition: color 0.3s ease-in-out;
 }
 
-.login-link:hover {
+.signup-link:hover {
     color: #84272B;
 }
 
