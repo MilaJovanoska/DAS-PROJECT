@@ -19,5 +19,3 @@ class Stock(models.Model):
         db_table = 'stock_prices'
 
 
-    class Meta:
-        db_table = 'stock_prices'  # Replace with the actual table name from your database
