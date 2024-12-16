@@ -65,14 +65,6 @@ body {
     box-shadow: 0 5px 10px rgba(255, 255, 255, 0.8);
 }
 
-.nav-login:hover {
-    background-color: white;
-    color: #0f0f1f;
-    transform: scale(1.05);
-    box-shadow: 0 3px 6px rgba(255, 255, 255, 0.6);
-}
-
-
 #dots-container {
     position: fixed;
     top: 0;
@@ -93,7 +85,6 @@ body {
     pointer-events: none;
 }
 
-
 @keyframes floatUpDown {
     0% {
         transform: translateY(0);
@@ -106,7 +97,6 @@ body {
     }
 }
 
-
 @keyframes fadeOut {
     0% {
         opacity: 0.8;
@@ -115,7 +105,6 @@ body {
         opacity: 0;
     }
 }
-
 
 .container {
     background-color: rgba(255, 255, 255, 0.1);
@@ -129,6 +118,8 @@ body {
     position: relative;
     backdrop-filter: blur(10px);
     overflow: hidden;
+    width: 90%;
+    max-width: 400px;
 }
 
 h1 {
@@ -182,7 +173,6 @@ button:hover {
     color: #84272B;
 }
 
-
 .footer {
     background: linear-gradient(to right, #EA454C, #84272B);
     color: white;
@@ -215,6 +205,7 @@ button:hover {
 .social-icon img:hover {
     transform: scale(1.1);
 }
+
 .existing-account {
     margin-top: 20px;
     text-align: center;
@@ -232,18 +223,64 @@ button:hover {
     color: #84272B;
 }
 
-.form-grid {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .navbar-logo {
+        height: 80px;
+    }
+
+    .nav-buttons {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .container {
+        width: 90%;
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    p {
+        font-size: 0.9em;
+    }
+
+    input {
+        font-size: 0.9em;
+        padding: 8px;
+    }
+
+    button {
+        font-size: 0.9em;
+        padding: 8px;
+    }
 }
 
-.form-column {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-}
+@media (max-width: 480px) {
+    .navbar-logo {
+        height: 60px;
+    }
 
-label, input {
-    margin-bottom: 15px;
+    h1 {
+        font-size: 1.3em;
+    }
+
+    p {
+        font-size: 0.8em;
+    }
+
+    button {
+        font-size: 0.8em;
+    }
+
+    input {
+        font-size: 0.8em;
+        padding: 6px;
+    }
 }
