@@ -10,7 +10,6 @@ html, body {
     color: white;
 }
 
-
 header {
     text-align: center;
     color: #fff;
@@ -19,20 +18,17 @@ header {
     text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
 }
 
-
 main {
     text-align: center;
     max-width: 800px;
     border-radius: 15px;
 }
 
-
 main p {
     font-size: 1.2em;
     line-height: 1.6;
     color: #ddd;
 }
-
 
 .navbar {
     display: flex;
@@ -43,13 +39,11 @@ main p {
     margin-bottom: 0;
 }
 
-
 .logo img {
     padding-top: 30px;
     height: 90px;
     display: block;
 }
-
 
 .nav-links {
     list-style-type: none;
@@ -100,14 +94,12 @@ main p {
     color: white;
 }
 
-
 form {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 20px;
     align-items: center;
 }
-
 
 form label {
     font-size: 16px;
@@ -118,7 +110,6 @@ form label {
     text-align: left;
     width: 100%;
 }
-
 
 form input, form textarea {
     width: 90%;
@@ -131,22 +122,18 @@ form input, form textarea {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), inset 0 1px 2px rgba(255, 255, 255, 0.2);
 }
 
-
 form input::placeholder, form textarea::placeholder {
     color: #D1E8F2;
 }
 
-
 form textarea {
-    grid-column: 1;
+    grid-column: 1 / -1;
     height: 100px;
-    margin-top: 0;
 }
 
-
 form button {
-    grid-column: 2;
-    justify-self: end;
+    grid-column: 1 / -1;
+    justify-self: center;
     padding: 10px 20px;
     font-size: 16px;
     color: white;
@@ -158,16 +145,13 @@ form button {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     transition: background-color 0.3s ease, color 0.3s ease;
     width: 200px;
-    margin-top: 100px;
 }
-
 
 form button:hover {
     background-color: white;
     color: #1B4965;
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
 }
-
 
 .footer {
     display: flex;
@@ -185,11 +169,9 @@ form button:hover {
     width: 100%;
 }
 
-
 .footer-content p {
     margin: 0;
 }
-
 
 .social-icons a {
     margin-left: 10px;
@@ -206,7 +188,7 @@ form button:hover {
     transform: scale(1.2);
 }
 
-
+/* Респонзивност */
 @media (max-width: 768px) {
     .navbar {
         flex-direction: column;
@@ -219,6 +201,18 @@ form button:hover {
         gap: 5px;
     }
 
+    .contact-container {
+        width: 90%;
+    }
+
+    form {
+        grid-template-columns: 1fr;
+    }
+
+    form textarea {
+        grid-column: 1;
+    }
+
     .footer {
         flex-direction: column;
         text-align: center;
@@ -229,3 +223,23 @@ form button:hover {
         height: 20px;
     }
 }
+
+@media (max-width: 480px) {
+    .logo img {
+        height: 70px;
+    }
+
+    .nav-links a {
+        font-size: 0.8em;
+        padding: 4px 6px;
+    }
+
+    form input, form textarea {
+        width: 100%;
+    }
+
+    form button {
+        width: 150px;
+    }
+}
+
