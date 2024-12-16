@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In - MKD Stock Spot</title>
+    <link rel="stylesheet" href="{% static 'css/log_in.css' %}">
+</head>
+<body>
+<div id="dots-container"></div>
+
+<div class="navbar">
+    <img src="{% static 'images/background2.png' %}" alt="Logo" class="navbar-logo">
+    <div class="nav-buttons">
+        <a href="{% url 'index.html' %}" class="nav-button">Home</a>
+        <a href="{% url 'sign_up.html' %}" class="nav-button nav-login">Sign up</a>
+        <a href="{% url 'contact.html' %}" class="nav-button">Contact</a>
+    </div>
+</div>
+
+<div class="container">
+    <h1>Welcome Back!</h1>
+    <p>Please log in to your account</p>
+    <form method="post">
+        {% csrf_token %}
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="**********" required>
+
+        <button type="submit">Log In</button>
+    </form>
+
+    <div class="existing-account">
+        <p>Don't have an account?</p>
+        <a href="{% url 'sign_up.html' %}" class="signup-link">Sign up here</a>
+    </div>
+</div>
+
+<div class="footer">
+    <p>© 2024 MKD Stock Spot Inc. All Rights Reserved.</p>
+    <div class="social-icons">
+        <a href="#" class="social-icon"><img src="{% static 'images/instagram_logo.png' %}" alt="Instagram"></a>
+        <a href="#" class="social-icon"><img src="{% static 'images/facebook_logo.png' %}" alt="Facebook"></a>
+        <a href="#" class="social-icon"><img src="{% static 'images/twitter_logo.png' %}" alt="Twitter"></a>
+    </div>
+</div>
+
+<script src="{% static 'js/log_in.js' %}"></script>
+</body>
+</html>

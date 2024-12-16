@@ -9,7 +9,6 @@ html, body {
     color: white;
 }
 
-
 header {
     text-align: center;
     color: #fff;
@@ -17,21 +16,6 @@ header {
     font-weight: bold;
     text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
 }
-
-
-main {
-    text-align: center;
-    max-width: 800px;
-    border-radius: 15px;
-}
-
-
-main p {
-    font-size: 1.2em;
-    line-height: 1.6;
-    color: #ddd;
-}
-
 
 .navbar {
     display: flex;
@@ -42,13 +26,11 @@ main p {
     margin-bottom: 0;
 }
 
-
 .logo img {
     padding-top: 30px;
     height: 180px;
     display: block;
 }
-
 
 .nav-links {
     list-style-type: none;
@@ -69,7 +51,6 @@ main p {
     font-style: normal;
 }
 
-
 .nav-links a:hover {
     background-color: white;
     color: #0f0f1f;
@@ -84,7 +65,6 @@ main p {
     box-shadow: 0 3px 6px rgba(255, 255, 255, 0.6);
 }
 
-
 .hero-section {
     display: flex;
     justify-content: space-between;
@@ -93,8 +73,8 @@ main p {
     color: white;
     margin-top: 0;
     margin-bottom: 150px;
+    flex-wrap: wrap;
 }
-
 
 .hero-text {
     max-width: 50%;
@@ -103,7 +83,6 @@ main p {
 .hero-text h1 {
     font-size: 2.5em;
     margin-bottom: 20px;
-    width: 700px;
     text-align: center;
 }
 
@@ -127,14 +106,12 @@ main p {
     border: 1px solid transparent;
 }
 
-
 .hero-text .btn:hover {
     background-color: #191941;
     color: white;
     box-shadow: 0 4px 8px rgba(255, 255, 255, 0.6);
     border: 1px solid white;
 }
-
 
 .hero-image img {
     max-width: 100%;
@@ -158,11 +135,9 @@ main p {
     width: 100%;
 }
 
-
 .footer-content p {
     margin: 0;
 }
-
 
 .social-icons a {
     margin-left: 10px;
@@ -179,7 +154,7 @@ main p {
     transform: scale(1.2);
 }
 
-
+/* Респонзивност */
 @media (max-width: 768px) {
     .navbar {
         flex-direction: column;
@@ -194,6 +169,7 @@ main p {
 
     .hero-section {
         flex-direction: column;
+        align-items: center;
         padding: 10px;
     }
 
@@ -220,3 +196,29 @@ main p {
     }
 }
 
+@media (max-width: 480px) {
+    .logo img {
+        height: 120px;
+    }
+
+    .hero-text h1 {
+        font-size: 1.8em;
+    }
+
+    .hero-text p {
+        font-size: 1em;
+    }
+
+    .hero-text .btn {
+        padding: 8px 15px;
+        font-size: 0.9em;
+    }
+
+    .hero-image img {
+        max-height: 250px;
+    }
+
+    .footer-content {
+        flex-direction: column;
+    }
+}
