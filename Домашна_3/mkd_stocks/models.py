@@ -19,3 +19,4 @@ class Stock(models.Model):
         db_table = 'stock_prices'
 
 
+
