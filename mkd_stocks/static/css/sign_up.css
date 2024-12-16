@@ -215,3 +215,35 @@ button:hover {
 .social-icon img:hover {
     transform: scale(1.1);
 }
+.existing-account {
+    margin-top: 20px;
+    text-align: center;
+    color: white;
+}
+
+.login-link {
+    text-decoration: none;
+    color: #FFF;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out;
+}
+
+.login-link:hover {
+    color: #84272B;
+}
+
+.form-grid {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.form-column {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+label, input {
+    margin-bottom: 15px;
+}
