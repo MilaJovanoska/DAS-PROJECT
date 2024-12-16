@@ -12,7 +12,6 @@ html, body {
     color: white;
 }
 
-
 header {
     text-align: center;
     color: #fff;
@@ -21,7 +20,6 @@ header {
     text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
     padding: 10px 0;
 }
-
 
 .navbar {
     display: flex;
@@ -68,7 +66,6 @@ header {
     transform: scale(1.05);
 }
 
-
 main {
     flex: 1;
     text-align: center;
@@ -82,7 +79,6 @@ main p {
     line-height: 1.6;
     color: #ddd;
 }
-
 
 .container {
     display: flex;
@@ -129,7 +125,6 @@ main p {
     margin: 0;
 }
 
-
 .social-icons a {
     margin-left: 10px;
     display: inline-block;
@@ -145,48 +140,89 @@ main p {
     transform: scale(1.2);
 }
 
-
+/* Респонзивност */
 @media (max-width: 768px) {
     .navbar {
         flex-direction: column;
         text-align: center;
         height: auto;
+        padding: 10px 0;
+    }
+
+    .logo img {
+        height: 80px;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .nav-links a {
+        padding: 6px 12px;
+        font-size: 1em;
+    }
+
+    .section {
+        flex: 1 1 100%;
+        max-width: 100%;
+        padding: 15px;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo img {
+        height: 60px;
+    }
+
+    .nav-links a {
+        font-size: 0.9em;
+        padding: 4px 8px;
+    }
+
+    main {
+        padding: 10px;
+    }
+
+    .section {
+        padding: 10px;
+        font-size: 0.9em;
+    }
+
+    .footer {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .social-icons img {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+@media (max-width: 360px) {
+    header {
+        font-size: 1.5em;
     }
 
     .logo img {
         height: 50px;
     }
 
-    .nav-links {
-        justify-content: center;
-    }
-
-    .section {
-        flex: 1 1 100%;
-        max-width: 100%;
-    }
-
-    .footer-content {
-        flex-direction: column;
-        align-items: center;
-    }
-}
-
-@media (max-width: 480px) {
     .nav-links a {
         font-size: 0.8em;
-        padding: 5px 10px;
+        padding: 3px 6px;
     }
 
     .section {
-        padding: 15px;
-    }
-
-    .footer {
-        flex-direction: column;
-    }
-
-    .footer-content {
-        flex-direction: column;
+        font-size: 0.8em;
+        padding: 8px;
     }
 }
+
