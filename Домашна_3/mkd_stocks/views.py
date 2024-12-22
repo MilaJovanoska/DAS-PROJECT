@@ -1,16 +1,23 @@
 # Create your views here.
 def home(request):
-    return render(request, 'mkd_stocks/index.html')
+    return render(request, 'index.html')
 def about_us(request):
-    return render(request, 'mkd_stocks/about_us.html')
+    return render(request, 'about_us.html')
 def sign_up(request):
-    return render(request, 'mkd_stocks/sign_up.html')
+    return render(request, 'sign_up.html')
 def news(request):
-    return render(request, 'mkd_stocks/stock_data.html')
+    return render(request, 'stock_data.html')
 def contact(request):
-    return render(request, 'mkd_stocks/contact.html')
+    return render(request, 'contact.html')
 
+def technical_analysis(request):
+    return render(request, 'technical_analysis.html')
 
+def nlp_analysis(request):
+    return render(request, 'nlp_analysis.html')
+
+def lstm_analysis(request):
+    return render(request, 'lstm_analysis.html')
 
 from django.shortcuts import render
 from django.contrib import messages
@@ -55,7 +62,7 @@ def stock_list(request):
         table_data = Stock.objects.all().order_by('-date')[:15]
 
 
-    return render(request, 'mkd_stocks/stock_data.html', {
+    return render(request, 'stock_data.html', {
         'stocks': table_data,
         'graph_data': graph_data,
         'query': query,
@@ -63,7 +70,7 @@ def stock_list(request):
     })
 
 def login_view(request):
-    return render(request, 'mkd_stocks/log_in.html')
+    return render(request, 'log_in.html')
 
 
 
