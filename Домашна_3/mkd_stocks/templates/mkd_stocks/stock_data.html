@@ -98,9 +98,12 @@
             text-align: center;
         }
 
-        th {
+        thead th {
+            position: sticky;
+            top: 0;
             background-color: #1B4965;
             color: white;
+            z-index: 1;
         }
 
         tr:nth-child(even) {
@@ -114,11 +117,31 @@
         tr:hover {
             background-color: #f1f1f1;
             color: #2D5D7E;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         #chartContainer {
             width: 90%;
             margin: 20px auto;
+        }
+
+        @media (max-width: 768px) {
+            .menu {
+                flex-direction: column;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            .search-container {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            #chartContainer {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -140,8 +163,7 @@
 <!-- Форма за филтрирање според issuer и датум -->
 <form class="search-container" method="get" action="">
     <input type="text" name="query" value="{{ query }}" placeholder="Search by issuer...">
-    <input type="date" name="start_date" value="{{ start_date }}" placeholder="Start Date">
-    <input type="date" name="end_date" value="{{ end_date }}" placeholder="End Date">
+    <input type="date" name="date" value="{{ date }}" placeholder="Date">
     <button type="submit">Search</button>
 </form>
 
@@ -211,6 +233,15 @@
         },
         options: {
             responsive: true,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `Price: ${context.raw}`;
+                        }
+                    }
+                }
+            },
             scales: {
                 x: { ticks: { color: 'white' } },
                 y: { ticks: { color: 'white' } }

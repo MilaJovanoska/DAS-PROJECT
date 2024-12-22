@@ -52,22 +52,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'DAS_PROJECT.urls'
 
-# TEMPLATES = [
-#     {
-#         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-#         'DIRS': [BASE_DIR / 'templates']
-#         ,
-#         'APP_DIRS': True,
-#         'OPTIONS': {
-#             'context_processors': [
-#                 'django.template.context_processors.debug',
-#                 'django.template.context_processors.request',
-#                 'django.contrib.auth.context_processors.auth',
-#                 'django.contrib.messages.context_processors.messages',
-#             ],
-#         },
-#     },
-# ]
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -135,18 +120,14 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-# STATIC_URL = 'static/'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    BASE_DIR / "../mkd_stocks/static",  # Path to your static directory
+    BASE_DIR / "./mkd_stocks/static",  # Path to your static directory
 ]
 

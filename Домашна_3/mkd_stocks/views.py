@@ -11,29 +11,55 @@ def contact(request):
     return render(request, 'mkd_stocks/contact.html')
 
 
+
 from django.shortcuts import render
+from django.contrib import messages
 from .models import Stock
+from datetime import datetime
 
 def stock_list(request):
-    query = request.GET.get('query', '')  # Get the issuer name from the search bar
+    query = request.GET.get('query', '').strip()
+    date = request.GET.get('date', '').strip()
     table_data = []
     graph_data = []
 
-    if query:
-        # Fetch only the first 15 rows for the table
-        table_data = Stock.objects.filter(issuer__icontains=query).order_by('date')[:15]
-        # Fetch all rows for the graph and sample every 5th row
-        all_graph_data = Stock.objects.filter(issuer__icontains=query).order_by('date')
-        graph_data = all_graph_data[::5]  # Include every 5th row
+    original_date = date
+
+
+    if date:
+        try:
+
+            date = datetime.strptime(date, '%Y-%m-%d').strftime('%d.%m.%Y')
+
+            day, month, year = date.split('.')
+            date = f"{day}.{int(month)}.{year}"
+        except ValueError:
+            messages.error(request, "Invalid date format. Please use a valid date.")
+            date = ''
+
+
+    if date and query:
+
+        table_data = Stock.objects.filter(issuer__icontains=query, date=date).order_by('date')
+        graph_data = table_data[:10]
+    elif query:
+
+        table_data = Stock.objects.filter(issuer__icontains=query).order_by('-date')[:15]
+        all_graph_data = Stock.objects.filter(issuer__icontains=query).order_by('-date')
+        graph_data = all_graph_data[:10]
+    elif date:
+
+        messages.error(request, "Please provide an issuer along with the date.")
     else:
-        # Show default empty table and graph if no query
-        table_data = Stock.objects.all()[:15]
-        graph_data = []
+
+        table_data = Stock.objects.all().order_by('-date')[:15]
+
 
     return render(request, 'mkd_stocks/stock_data.html', {
-        'stocks': table_data,   # Data for the table
-        'graph_data': graph_data,  # Sampled data for the graph
-        'query': query
+        'stocks': table_data,
+        'graph_data': graph_data,
+        'query': query,
+        'date': original_date
     })
 
 def login_view(request):
