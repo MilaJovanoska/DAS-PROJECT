@@ -10,8 +10,9 @@ urlpatterns = [
     path('stocks/', views.stock_list, name='stock_list'),
     path('login/', views.login_view, name='log_in.html'),
     path('technical-analysis/', views.technical_analysis, name='technical_analysis.html'),
+    path('get-indicators/', views.get_indicators, name='get_indicators'),
     path('nlp-analysis/', views.nlp_analysis, name='nlp_analysis.html'),
+    path('company_view/', views.company_view, name='company_view'),  # Додај ја рутата
     path('lstm-analysis/', views.lstm_analysis, name='lstm_analysis'),
     path('get-stock-data/', views.get_stock_data, name='get_stock_data'),
-    path('get-indicators/', views.get_indicators, name='get_indicators')
 ]
