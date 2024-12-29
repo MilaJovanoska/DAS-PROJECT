@@ -97,157 +97,167 @@
             </div>
         </div>
     </div>
-     <!-- Recommendation Section -->
-<div class="recommendation-container">
-    <h3>Recommendation</h3>
-    <p>Based on the latest RSI value:</p>
-    <div class="recommendation-bubbles">
+    <!-- Recommendation Section -->
+    <div class="recommendation-container">
+        <h3>Recommendation</h3>
+        <p>Based on the latest RSI value:</p>
+        <div class="recommendation-bubbles">
             <div class="bubble buy" id="buy-bubble">BUY THE STOCKS</div>
             <div class="bubble hold" id="hold-bubble">DO NOTHING</div>
             <div class="bubble sell" id="sell-bubble">SELL THE STOCKS</div>
+        </div>
     </div>
-</div>
 
-<div class="prediction-container">
-    <p id="company-message">According to the latest data for the company, the predictions for the value of stock in the next day are:</p>
-    <input type="text" id="predicted-value" placeholder="Enter predicted value..." readonly>
-</div>
+    <div class="prediction-container">
+        <p id="company-message">According to the latest data for the company, the predictions for the value of stock in
+            the next day are:</p>
+        <input type="text" id="predicted-value" placeholder="Enter predicted value..." readonly>
+    </div>
 </main>
 
 <script>
-let stockChartInstance; // Променлива за чување на тековниот график
+    let stockChartInstance; // Променлива за чување на тековниот график
 
-// Ова е во внатрешниот скрипт
-document.getElementById("generate-graph").addEventListener("click", function () {
-    const companyName = document.getElementById("company-name").value.trim();
-    const timePeriod = document.getElementById("time-period").value;
+    // Ова е во внатрешниот скрипт
+    document.getElementById("generate-graph").addEventListener("click", function () {
+        const companyName = document.getElementById("company-name").value.trim();
+        const timePeriod = document.getElementById("time-period").value;
 
-    if (!companyName) {
-        alert("Please enter a company name!");
-        return;
-    }
+        if (!companyName) {
+            alert("Please enter a company name!");
+            return;
+        }
 
-    // Update the company name in the prediction message
-    document.getElementById("company-message").textContent = `According to the latest data for ${companyName}, the predictions for the value of stock in the next day are:`;
+        // Update the company name in the prediction message
+        document.getElementById("company-message").textContent = `According to the latest data for ${companyName}, the predictions for the value of stock in the next day are:`;
 
-    // Fetch data for the graph
-    const timestamp = new Date().getTime(); // Додавање timestamp за избегнување кеширање
-    fetch(`/get-stock-data/?issuer=${companyName}&time_period=${timePeriod}&_=${timestamp}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                alert(data.error);
-                return;
-            }
+        // Fetch data for the graph
+        const timestamp = new Date().getTime(); // Додавање timestamp за избегнување кеширање
+        fetch(`/get-stock-data/?issuer=${companyName}&time_period=${timePeriod}&_=${timestamp}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
 
-            const ctx = document.getElementById('stockChart').getContext('2d');
+                const ctx = document.getElementById('stockChart').getContext('2d');
 
-            // Destroy old chart instance if it exists
-            if (stockChartInstance) {
-                stockChartInstance.destroy();
-            }
+                // Destroy old chart instance if it exists
+                if (stockChartInstance) {
+                    stockChartInstance.destroy();
+                }
 
-            // Create new chart instance
-            stockChartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: data.dates,
-                    datasets: [{
-                        label: 'Last Price',
-                        data: data.prices,
-                        borderColor: '#ff69b4',
-                        backgroundColor: 'rgba(255, 105, 180, 0.2)',
-                        tension: 0.4,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Date',
-                                color: '#ff2f92',
-                                font: {
-                                    size: 16,
-                                    weight: 'bold',
-                                },
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Last Price',
-                                color: '#ff2f92',
-                                font: {
-                                    size: 16,
-                                    weight: 'bold',
-                                },
+                // Create new chart instance
+                stockChartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.dates,
+                        datasets: [{
+                            label: 'Last Price',
+                            data: data.prices,
+                            borderColor: '#ff69b4',
+                            backgroundColor: 'rgba(255, 105, 180, 0.2)',
+                            tension: 0.4,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Date',
+                                    color: '#ff2f92',
+                                    font: {
+                                        size: 16,
+                                        weight: 'bold',
+                                    },
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Last Price',
+                                    color: '#ff2f92',
+                                    font: {
+                                        size: 16,
+                                        weight: 'bold',
+                                    },
+                                }
                             }
                         }
                     }
-                }
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching graph data:", error);
+                alert("An error occurred while fetching the graph data. Please try again.");
             });
-        })
-        .catch(error => {
-            console.error("Error fetching graph data:", error);
-            alert("An error occurred while fetching the graph data. Please try again.");
-        });
 
-    // Fetch indicators
-    fetch(`/get-indicators/?issuer=${companyName}&time_period=${timePeriod}&_=${timestamp}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                alert(data.error);
-                return;
-            }
+        // Fetch indicators
+        fetch(`/get-indicators/?issuer=${companyName}&time_period=${timePeriod}&_=${timestamp}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
 
-            // Populate oscillators
-            document.querySelector(".oscillator-output[placeholder='RSI']").value = data.oscillators.RSI || "N/A";
-            document.querySelector(".oscillator-output[placeholder='SO']").value = data.oscillators.SO || "N/A";
-            document.querySelector(".oscillator-output[placeholder='MACD']").value = data.oscillators.MACD || "N/A";
-            document.querySelector(".oscillator-output[placeholder='CCI']").value = data.oscillators.CCI || "N/A";
-            document.querySelector(".oscillator-output[placeholder='ATR']").value = data.oscillators.ATR || "N/A";
+                // Populate oscillators
+                document.querySelector(".oscillator-output[placeholder='RSI']").value = data.oscillators.RSI || "N/A";
+                document.querySelector(".oscillator-output[placeholder='SO']").value = data.oscillators.SO || "N/A";
+                document.querySelector(".oscillator-output[placeholder='MACD']").value = data.oscillators.MACD || "N/A";
+                document.querySelector(".oscillator-output[placeholder='CCI']").value = data.oscillators.CCI || "N/A";
+                document.querySelector(".oscillator-output[placeholder='ATR']").value = data.oscillators.ATR || "N/A";
 
-            // Populate Moving Averages
-            document.querySelector(".moving-output[placeholder='SMA']").value = data.moving_averages.SMA || "N/A";
-            document.querySelector(".moving-output[placeholder='EMA']").value = data.moving_averages.EMA || "N/A";
-            document.querySelector(".moving-output[placeholder='WMA']").value = data.moving_averages.WMA || "N/A";
-            document.querySelector(".moving-output[placeholder='HMA']").value = data.moving_averages.HMA || "N/A";
-            document.querySelector(".moving-output[placeholder='AMA']").value = data.moving_averages.AMA || "N/A";
+                // Populate Moving Averages
+                document.querySelector(".moving-output[placeholder='SMA']").value = data.moving_averages.SMA || "N/A";
+                document.querySelector(".moving-output[placeholder='EMA']").value = data.moving_averages.EMA || "N/A";
+                document.querySelector(".moving-output[placeholder='WMA']").value = data.moving_averages.WMA || "N/A";
+                document.querySelector(".moving-output[placeholder='HMA']").value = data.moving_averages.HMA || "N/A";
+                document.querySelector(".moving-output[placeholder='AMA']").value = data.moving_averages.AMA || "N/A";
 
-            // RSI logic for bubbles
-            const rsiValue = parseFloat(data.oscillators.RSI) || 0;
+                // RSI logic for bubbles
+                const rsiValue = parseFloat(data.oscillators.RSI) || 0;
 
-            // Reset all bubbles
-            const buyBubble = document.getElementById("buy-bubble");
-            const holdBubble = document.getElementById("hold-bubble");
-            const sellBubble = document.getElementById("sell-bubble");
+                // Reset all bubbles
+                const buyBubble = document.getElementById("buy-bubble");
+                const holdBubble = document.getElementById("hold-bubble");
+                const sellBubble = document.getElementById("sell-bubble");
 
-            buyBubble.classList.remove("active");
-            holdBubble.classList.remove("active");
-            sellBubble.classList.remove("active");
+                buyBubble.classList.remove("active");
+                holdBubble.classList.remove("active");
+                sellBubble.classList.remove("active");
 
-            // Highlight the correct bubble based on RSI
-            if (rsiValue >= 70) {
-                sellBubble.classList.add("active");
-            } else if (rsiValue >= 50 && rsiValue < 70) {
-                holdBubble.classList.add("active");
-            } else {
-                buyBubble.classList.add("active");
-            }
-        })
-        .catch(error => {
-            console.error("Error fetching indicators:", error);
-            alert("An error occurred while fetching the indicators. Please try again.");
-        });
+                // Highlight the correct bubble based on RSI
+                if (rsiValue >= 70) {
+                    sellBubble.classList.add("active");
+                } else if (rsiValue >= 50 && rsiValue < 70) {
+                    holdBubble.classList.add("active");
+                } else {
+                    buyBubble.classList.add("active");
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching indicators:", error);
+                alert("An error occurred while fetching the indicators. Please try again.");
+            });
 
-    // **Random Price Generation for Predicted Value**
-    const randomPrice = (Math.random() * (1500 - 500) + 500).toFixed(2); // Random value between 500 and 1500 (for example)
-    document.getElementById("predicted-value").value = `The next price will be: ${randomPrice} МКД`;
+        // **Random Price Generation for Predicted Value**
+        const randomPrice = (Math.random() * (30000 - 20000) + 20000).toFixed(2); // Random value between 20000 and 30000 (for example)
 
-});
+        // Function to add commas as thousand separators
+        function addCommas(number) {
+            return number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // Format the random price with commas and display it
+        const formattedPrice = addCommas(randomPrice);
+        // Set the predicted value in the input element
+        document.getElementById("predicted-value").value = `The next price will be: ${formattedPrice} mkd`;
+
+    });
 </script>
 </body>
 </html>
