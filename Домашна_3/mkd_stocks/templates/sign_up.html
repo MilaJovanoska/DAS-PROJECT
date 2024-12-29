@@ -14,7 +14,7 @@
     <img src="{% static 'images/background2.png' %}" alt="Logo" class="navbar-logo">
     <div class="nav-buttons">
         <a href="{% url 'index.html' %}" class="nav-button">Home</a>
-        <a href="{% url 'sign_up.html' %}" class="nav-button nav-login">Sign up</a>
+        <a href="{% url 'log_in.html' %}" class="nav-button nav-login">Log in</a>
         <a href="{% url 'contact.html' %}" class="nav-button">Contact</a>
     </div>
 </div>
@@ -41,7 +41,7 @@
             </div>
         </div>
 
-        <button type="submit">Sign up</button>
+        <button type="button" onclick="window.location.href='{% url 'stock_list' %}'">Sign up</button>
     </form>
 
     <div class="existing-account">

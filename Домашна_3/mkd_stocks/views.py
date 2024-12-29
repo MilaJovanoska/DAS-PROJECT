@@ -69,7 +69,6 @@ def stock_list(request):
         'date': original_date
     })
 
-
 from django.http import JsonResponse
 from datetime import datetime
 from .models import Stock
@@ -362,88 +361,7 @@ def company_view(request):
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
 
 
-# from django.http import JsonResponse
-# from .data_utils import get_historical_data, normalize_data, create_sequences
-# from .train_lstm import train_lstm_model
-# from sklearn.model_selection import train_test_split
-# import numpy as np
-# import os
-#
-#
-# def train_model_view(request, issuer_name):
-#     # 1. Подготви податоци
-#     print(f"Training LSTM model for issuer: {issuer_name}")
-#     df = get_historical_data(issuer_name)
-#
-#     if df.empty:
-#         return JsonResponse({"error": "No data found for the specified issuer."}, status=400)
-#
-#     df, scaler = normalize_data(df)
-#     sequence_length = 60
-#     data = df['normalized_price'].values
-#
-#     if len(data) < sequence_length:
-#         return JsonResponse({"error": "Not enough data to create sequences for training."}, status=400)
-#
-#     X, y = create_sequences(data, sequence_length)
-#     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, shuffle=False)
-#
-#     # 2. Тренирај го LSTM моделот
-#     model = train_lstm_model(X_train, y_train, X_test, y_test)
-#
-#     # 3. Создај папка за модели ако не постои
-#     os.makedirs("models", exist_ok=True)
-#     model_path = f"models/{issuer_name}_lstm_model.h5"
-#     model.save(model_path)  # Се снима со име на издавачот
-#
-#     # 4. Врати одговор
-#     return JsonResponse({
-#         "message": "Model trained and saved successfully!",
-#         "model_path": model_path,
-#         "X_train_shape": X_train.shape,
-#         "X_test_shape": X_test.shape,
-#         "y_train_shape": y_train.shape,
-#         "y_test_shape": y_test.shape
-#     })
-#
-#
-#
-#
-# from .data_utils import get_historical_data, normalize_data, create_sequences
-# import numpy as np
-# from django.http import JsonResponse
-# import os
-#
-#
-# def predict_stock_prices(request, issuer_name):
-#     # 1. Провери дали моделот постои
-#     model_path = f"models/{issuer_name}_lstm_model.h5"
-#     if not os.path.exists(model_path):
-#         return JsonResponse({"error": "Model not found for the specified issuer."}, status=404)
-#
-#     # 2. Вчитај го моделот
-#     model = tf.load_model(model_path)
-#
-#     # 3. Подготви податоци
-#     df = get_historical_data(issuer_name)
-#     if df.empty:
-#         return JsonResponse({"error": "No data found for the specified issuer."}, status=400)
-#
-#     df, scaler = normalize_data(df)
-#     sequence_length = 60
-#     data = df['normalized_price'].values
-#     if len(data) < sequence_length:
-#         return JsonResponse({"error": "Not enough data to make predictions."}, status=400)
-#
-#     X, _ = create_sequences(data, sequence_length)
-#
-#     # 4. Направи предвидувања
-#     predictions = model.predict(X)
-#     predictions = scaler.inverse_transform(predictions)  # Врати ги во оригиналниот опсег
-#
-#     # 5. Форматирај го резултатот
-#     predicted_prices = predictions.flatten().tolist()
-#     return JsonResponse({"predicted_prices": predicted_prices})
+
 
 from django.http import JsonResponse
 from .data_utils import get_historical_data, normalize_data, create_sequences
