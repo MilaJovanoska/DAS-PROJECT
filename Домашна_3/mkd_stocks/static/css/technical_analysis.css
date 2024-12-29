@@ -389,5 +389,121 @@ main {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     outline: none;
 }
+#rsi-gauge-container {
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    text-align: center;
+    width: 100%;
+}
 
+#rsi-gauge-container h3 {
+    font-size: 24px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #ff2f92;
+    margin-bottom: 15px;
+}
 
+#rsi-gauge {
+    margin: 0 auto;
+    width: 100%;
+    height: 150px;
+}
+.prediction-container {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: white;
+    color: #ff2f92;
+    border-radius: 15px;
+    text-align: center;
+    max-width: 600px;
+    width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 50px;
+}
+
+.prediction-container p {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+#predicted-value {
+    width: 50%;
+    padding: 10px;
+    border: 2px solid #ff2f92;
+    border-radius: 10px;
+    outline: none;
+    font-size: 16px;
+    text-align: center;
+    background-color: #fff;
+    color: #ff2f92;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Recommendation Section */
+.recommendation-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.recommendation-container h3 {
+    font-size: 30px; /* Поголем текст за насловот */
+    color: white;
+}
+
+.recommendation-container p {
+    font-size: 20px; /* Поголем текст за описот */
+    color: white;
+    margin-bottom: 20px;
+}
+
+.recommendation-bubbles {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.bubble {
+    width: 140px; /* Поголем круг */
+    height: 140px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px; /* Поголем текст во кругот */
+    font-weight: bold;
+    text-align: center;
+    color: #fff; /* Бела боја за текстот */
+
+}
+
+/* Specific Bubble Colors */
+.bubble.buy {
+    background-color: #fe4a49  ; /* Јасно бела боја за КУПИ */
+
+}
+
+/* Highlight Active Bubble */
+.bubble.active {
+    transform: scale(1.2); /* Зголемување на активниот круг */
+    border: 3px solid white; /* Бел бордер за истакнување */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Подлабока сенка */
+    opacity: 1; /* Полна видливост */
+}
+
+.bubble.hold {
+    background-color: #2ab7ca ; /* Јасна сина боја за ЗАДРЖИ */
+
+}
+
+.bubble.sell {
+    background-color: #fed766 ; /* Јасна зелена боја за ПРОДАЈ */
+
+}

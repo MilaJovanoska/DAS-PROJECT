@@ -250,100 +250,7 @@ def calculate_ama(prices, period=10):
 
 def login_view(request):
     return render(request, 'log_in.html')
-# def read_sentiment_data():
-#     file_path = 'sentiment_counts.csv'  # Постави точна патека до твојот CSV фајл
-#     try:
-#         df = pd.read_csv(file_path)
-#         print(df.head())  # Испечати ги првите неколку редови за проверка
-#         return df
-#     except FileNotFoundError:
-#         raise FileNotFoundError("CSV file not found. Check the file path.")
-#     except pd.errors.EmptyDataError:
-#         raise ValueError("CSV file is empty.")
-#     except Exception as e:
-#         raise Exception(f"Error reading CSV: {e}")
-#
-#
-# # Главен view за компанија и препораки
-# @csrf_exempt
-# def company_view(request):
-#     # Иницијализација на променливи
-#     recommendation = ""
-#     sentiment_label = ""
-#     pie_data = [0, 0, 0]  # Дефинирање на Pie chart податоци
-#     bar_data = [0, 0, 0]  # Дефинирање на Bar chart податоци
-#
-#     if request.method == 'POST':
-#         try:
-#             # Читање на податоци од AJAX барањето
-#             data = json.loads(request.body)
-#             company_name = data.get('company_name')
-#
-#             if not company_name:
-#                 return JsonResponse({'error': 'Company name is required'}, status=400)
-#
-#             # Читање на податоци од CSV
-#             df = read_sentiment_data()
-#
-#             # Филтрирање на податоци за избраната компанија
-#             company_data = df[df['Company'] == company_name]
-#
-#             if not company_data.empty:
-#                 company_row = company_data.iloc[0]  # Земете го првиот резултат
-#
-#                 # Определување на сентиментот според проценти
-#                 positive = company_row.get('Positive', 0)
-#                 negative = company_row.get('Negative', 0)
-#
-#                 if positive > 50:
-#                     sentiment_label = "Positive"
-#                 elif negative > 50:
-#                     sentiment_label = "Negative"
-#                 else:
-#                     sentiment_label = "Neutral"
-#
-#                 # Додавање препорака
-#                 recommendation = company_row.get('Recommendation', 'No recommendation')
-#
-#                 print(f"Recommendation: {recommendation}")
-#                 print(f"Sentiment: {sentiment_label}")
-#
-#                 # Генерирање податоци за графикони
-#                 if sentiment_label == "Positive":
-#                     pie_data = [70, 20, 10]
-#                     bar_data = [15, 10, 5]
-#                 elif sentiment_label == "Negative":
-#                     pie_data = [20, 70, 10]
-#                     bar_data = [10, 15, 5]
-#                 else:
-#                     pie_data = [30, 30, 40]
-#                     bar_data = [12, 8, 10]
-#             else:
-#                 recommendation = "No data available for this company"
-#                 pie_data = [0, 0, 100]
-#                 bar_data = [0, 0, 0]
-#
-#             # Врати JSON одговор
-#             return JsonResponse({
-#                 'recommendation': recommendation,
-#                 'sentiment_label': sentiment_label,
-#                 'pie_data': pie_data,
-#                 'bar_data': bar_data
-#             })
-#
-#         except json.JSONDecodeError:
-#             return JsonResponse({'error': 'Invalid JSON format'}, status=400)
-#         except FileNotFoundError as e:
-#             return JsonResponse({'error': str(e)}, status=500)
-#         except Exception as e:
-#             return JsonResponse({'error': str(e)}, status=500)
-#
-#     return JsonResponse({'error': 'Invalid request method'}, status=405)
-import os
-import pandas as pd
-import json
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+
 
 import pandas as pd
 import json
@@ -441,58 +348,171 @@ def company_view(request):
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
 
 
-
-#Tuka e tarin
-def train_model_view(request, issuer_name):
-    # 1. Подготви податоци
-    df = get_historical_data(issuer_name)
-    df, scaler = normalize_data(df)
-    sequence_length = 60
-    data = df['normalized_price'].values
-    X, y = create_sequences(data, sequence_length)
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, shuffle=False)
-
-    # 2. Тренирај го LSTM моделот
-    model = train_lstm_model(X_train, y_train, X_test, y_test)
-
-    # 3. Сними го тренираниот модел
-    model.save('lstm_model.h5')  # Се снима во истата папка каде што е проектот
-
-    # 4. Врати одговор
-    return JsonResponse({
-        "message": "Model trained and saved successfully!",
-        "X_train_shape": X_train.shape,
-        "X_test_shape": X_test.shape,
-        "y_train_shape": y_train.shape,
-        "y_test_shape": y_test.shape
-    })
-
+# from django.http import JsonResponse
+# from .data_utils import get_historical_data, normalize_data, create_sequences
+# from .train_lstm import train_lstm_model
+# from sklearn.model_selection import train_test_split
+# import numpy as np
+# import os
+#
+#
+# def train_model_view(request, issuer_name):
+#     # 1. Подготви податоци
+#     print(f"Training LSTM model for issuer: {issuer_name}")
+#     df = get_historical_data(issuer_name)
+#
+#     if df.empty:
+#         return JsonResponse({"error": "No data found for the specified issuer."}, status=400)
+#
+#     df, scaler = normalize_data(df)
+#     sequence_length = 60
+#     data = df['normalized_price'].values
+#
+#     if len(data) < sequence_length:
+#         return JsonResponse({"error": "Not enough data to create sequences for training."}, status=400)
+#
+#     X, y = create_sequences(data, sequence_length)
+#     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, shuffle=False)
+#
+#     # 2. Тренирај го LSTM моделот
+#     model = train_lstm_model(X_train, y_train, X_test, y_test)
+#
+#     # 3. Создај папка за модели ако не постои
+#     os.makedirs("models", exist_ok=True)
+#     model_path = f"models/{issuer_name}_lstm_model.h5"
+#     model.save(model_path)  # Се снима со име на издавачот
+#
+#     # 4. Врати одговор
+#     return JsonResponse({
+#         "message": "Model trained and saved successfully!",
+#         "model_path": model_path,
+#         "X_train_shape": X_train.shape,
+#         "X_test_shape": X_test.shape,
+#         "y_train_shape": y_train.shape,
+#         "y_test_shape": y_test.shape
+#     })
+#
+#
+#
+#
+# from .data_utils import get_historical_data, normalize_data, create_sequences
+# import numpy as np
+# from django.http import JsonResponse
+# import os
+#
+#
+# def predict_stock_prices(request, issuer_name):
+#     # 1. Провери дали моделот постои
+#     model_path = f"models/{issuer_name}_lstm_model.h5"
+#     if not os.path.exists(model_path):
+#         return JsonResponse({"error": "Model not found for the specified issuer."}, status=404)
+#
+#     # 2. Вчитај го моделот
+#     model = tf.load_model(model_path)
+#
+#     # 3. Подготви податоци
+#     df = get_historical_data(issuer_name)
+#     if df.empty:
+#         return JsonResponse({"error": "No data found for the specified issuer."}, status=400)
+#
+#     df, scaler = normalize_data(df)
+#     sequence_length = 60
+#     data = df['normalized_price'].values
+#     if len(data) < sequence_length:
+#         return JsonResponse({"error": "Not enough data to make predictions."}, status=400)
+#
+#     X, _ = create_sequences(data, sequence_length)
+#
+#     # 4. Направи предвидувања
+#     predictions = model.predict(X)
+#     predictions = scaler.inverse_transform(predictions)  # Врати ги во оригиналниот опсег
+#
+#     # 5. Форматирај го резултатот
+#     predicted_prices = predictions.flatten().tolist()
+#     return JsonResponse({"predicted_prices": predicted_prices})
 
 from django.http import JsonResponse
+from .data_utils import get_historical_data, normalize_data, create_sequences
+from .train_lstm import train_lstm_model
+from sklearn.model_selection import train_test_split
+
 import numpy as np
-from .data_utils import get_historical_data, normalize_data
+import os
 
 
-def predict_price_view(request, issuer_name):
-    # 1. Извлечи и нормализирај податоци
-    df = get_historical_data(issuer_name)
-    df, scaler = normalize_data(df)
-    sequence_length = 60
-    data = df['normalized_price'].values[-sequence_length:]  # Земи ги последните 60 записи
+def train_model_view(request, issuer_name):
+    try:
+        # 1. Подготви податоци
+        print(f"Training LSTM model for issuer: {issuer_name}")
+        df = get_historical_data(issuer_name)
 
-    # 2. Вчитај го зачуваниот модел
-    model = tf.keras.load_model('lstm_model.h5')
+        if df.empty:
+            return JsonResponse({"error": "No data found for the specified issuer."}, status=400)
 
-    # 3. Подготви податоци за предвидување
-    input_data = np.expand_dims(data, axis=0)  # Претвори во формат што моделот го очекува
+        df, scaler = normalize_data(df)
+        sequence_length = 60
+        data = df['normalized_price'].values
 
-    # 4. Направи предвидување
-    predicted_price = model.predict(input_data)
-    predicted_price = scaler.inverse_transform([[predicted_price[0][0]]])  # Де-нормализација
+        if len(data) < sequence_length:
+            return JsonResponse({"error": "Not enough data to create sequences for training."}, status=400)
 
-    # 5. Врати го резултатот
-    return JsonResponse({
-        "predicted_price": predicted_price[0][0]
-    })
+        X, y = create_sequences(data, sequence_length)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, shuffle=False)
+
+        # 2. Тренирај го LSTM моделот
+        model = train_lstm_model(X_train, y_train, X_test, y_test)
+
+        # 3. Создај папка за модели ако не постои
+        os.makedirs("models", exist_ok=True)
+        model_path = f"models/{issuer_name}_lstm_model.h5"
+        model.save(model_path)  # Се снима со име на издавачот
+
+        # 4. Врати одговор
+        return JsonResponse({
+            "message": "Model trained and saved successfully!",
+            "model_path": model_path,
+            "X_train_shape": X_train.shape,
+            "X_test_shape": X_test.shape,
+            "y_train_shape": y_train.shape,
+            "y_test_shape": y_test.shape
+        })
+
+    except Exception as e:
+        return JsonResponse({"error": f"An error occurred during training: {str(e)}"}, status=500)
+
+
+def predict_stock_prices(request, issuer_name):
+    try:
+        # 1. Провери дали моделот постои
+        model_path = f"models/{issuer_name}_lstm_model.h5"
+        if not os.path.exists(model_path):
+            return JsonResponse({"error": "Model not found for the specified issuer."}, status=404)
+
+        # 2. Вчитај го моделот
+        model = tf.keras.load_model(model_path)
+
+        # 3. Подготви податоци
+        df = get_historical_data(issuer_name)
+        if df.empty:
+            return JsonResponse({"error": "No data found for the specified issuer."}, status=400)
+
+        df, scaler = normalize_data(df)
+        sequence_length = 60
+        data = df['normalized_price'].values
+        if len(data) < sequence_length:
+            return JsonResponse({"error": "Not enough data to make predictions."}, status=400)
+
+        X, _ = create_sequences(data, sequence_length)
+
+        # 4. Направи предвидувања
+        predictions = model.predict(X)
+        predictions = scaler.inverse_transform(predictions)  # Врати ги во оригиналниот опсег
+
+        # 5. Форматирај го резултатот
+        predicted_prices = predictions.flatten().tolist()
+        return JsonResponse({"predicted_prices": predicted_prices})
+
+    except Exception as e:
+        return JsonResponse({"error": f"An error occurred during prediction: {str(e)}"}, status=500)
 
 
