@@ -15,7 +15,8 @@ urlpatterns = [
     path('company_view/', views.company_view, name='company_view'),  # Додај ја рутата
     path('lstm-analysis/', views.lstm_analysis, name='lstm_analysis'),
     path('get-stock-data/', views.get_stock_data, name='get_stock_data'),
-    #path('prepare-data/', views.prepare_data_for_training, name='prepare_data'),
+    # path('prepare-data/', views.prepare_data_for_training, name='prepare_data'),
     path('train-model/<str:issuer_name>/', views.train_model_view, name='train_model'),
     path('predict/<str:issuer_name>/', views.predict_stock_prices, name='predict')
+
 ]

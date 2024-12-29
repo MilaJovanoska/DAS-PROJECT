@@ -59,10 +59,16 @@
             object-fit: cover;
         }
 
-        .nav-buttons {
-            display: flex;
-            gap: 15px;
-            align-items: center;
+        .nav-buttons ul {
+            list-style-type: none;  /* Remove bullets */
+            margin: 0;              /* Remove default margin */
+            padding: 0;             /* Remove default padding */
+            display: flex;          /* Align items horizontally */
+            gap: 20px;              /* Add space between the items */
+        }
+
+        .nav-buttons li {
+            display: inline;        /* Display items inline */
         }
 
         .nav-button {
@@ -277,11 +283,13 @@
 <div class="navbar">
     <img src="{% static 'images/mkd_stock_spot_logo_purple.png' %}" alt="Logo" class="navbar-logo">
     <div class="nav-buttons">
-        <a href="#" class="nav-button">Home</a>
-        <a href="#" class="nav-button">About us</a>
-        <a href="#" class="nav-button">News</a>
-        <a href="#" class="nav-button nav-login">Log in</a>
-        <a href="#" class="nav-button">Contact</a>
+        <ul>
+            <li><a href="{% url 'index.html' %}" class="nav-button">Home</a></li>
+            <li><a href="{% url 'about_us.html' %}" class="nav-button">About us</a></li>
+            <li><a href="{% url 'stock_list' %}" class="nav-button">News</a></li>
+            <li><a href="{% url 'sign_up.html' %}" class="nav-button nav-login">Log in</a></li>
+            <li><a href="{% url 'contact.html' %}" class="nav-button">Contact</a></li>
+        </ul>
     </div>
 </div>
 
@@ -313,7 +321,6 @@
             <h3>Bar Chart of Buy, Sell, Normal</h3>
             <canvas id="barChart" width="300" height="300"></canvas>
         </div>
-
     </div>
 </div>
 
@@ -325,6 +332,7 @@
         <a href="#" class="social-icon"><img src="{% static 'images/twitter_logo.png' %}" alt="Twitter"></a>
     </div>
 </div>
+
 <script>
     function submitRecommendation() {
         const companyName = document.getElementById('company-name').value;
@@ -362,10 +370,10 @@
                     document.getElementById('do_nothing').classList.add('active');
                 }
 
-                // Ажурирај графикони (пример)
+                // Update charts (example)
                 console.log('Pie Data:', data.pie_data);
                 console.log('Bar Data:', data.bar_data);
-                updateCharts(data.pie_data, data.bar_data); // Имплементирај ја оваа функција
+                updateCharts(data.pie_data, data.bar_data); // Implement this function
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -394,11 +402,11 @@
         const pieCtx = document.getElementById('pieChart').getContext('2d');
         const barCtx = document.getElementById('barChart').getContext('2d');
 
-        // Ако графиконите веќе постојат, треба да ги уништите за да создадете нови
+        // Destroy existing charts if they exist
         if (pieChart) pieChart.destroy();
         if (barChart) barChart.destroy();
 
-        // Create the Pie chart
+        // Create Pie chart
         pieChart = new Chart(pieCtx, {
             type: 'pie',
             data: {
@@ -429,7 +437,7 @@
             }
         });
 
-        // Create the Bar chart
+        // Create Bar chart
         barChart = new Chart(barCtx, {
             type: 'bar',
             data: {
@@ -454,6 +462,5 @@
     }
 
 </script>
-
 </body>
 </html>

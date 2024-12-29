@@ -12,6 +12,7 @@ from .data_utils import get_historical_data, normalize_data, create_sequences
 from .train_lstm import train_lstm_model
 from sklearn.model_selection import train_test_split
 
+
 def home(request):
     return render(request, 'index.html')
 def about_us(request):
@@ -69,6 +70,12 @@ def stock_list(request):
     })
 
 
+from django.http import JsonResponse
+from datetime import datetime
+from .models import Stock
+import pandas as pd
+
+
 def get_stock_data(request):
     issuer = request.GET.get('issuer', '').strip()
     time_period = request.GET.get('time_period', '').strip()
@@ -77,34 +84,41 @@ def get_stock_data(request):
         return JsonResponse({"error": "Issuer is required."})
 
     try:
-        # Извлекување на податоците од базата
-        stocks = Stock.objects.filter(issuer=issuer)
+        # 🗂️ Извлекување на податоците од базата
+        stocks = Stock.objects.filter(issuer=issuer).values('date', 'last_price')
 
         if not stocks.exists():
             return JsonResponse({"error": f"No data found for issuer {issuer}."})
 
-        # Претворање на податоците во Python објекти за сортирање
-        stock_data = []
-        for stock in stocks:
-            try:
-                # Конверзија на датумот
-                date = datetime.strptime(stock.date, "%d.%m.%Y")
-                # Конверзија на цената од македонски формат
-                last_price = float(stock.last_price.replace('.', '').replace(',', '.'))
-                stock_data.append((date, last_price))
-            except ValueError:
-                continue
+        # 📊 Претворање на податоците во DataFrame
+        df = pd.DataFrame(list(stocks))
 
-        # Сортирање на податоците според датумот
-        stock_data.sort(key=lambda x: x[0])
+        # ✅ Валидација на колоните
+        if 'date' not in df.columns or 'last_price' not in df.columns:
+            return JsonResponse({"error": "Required columns ('date', 'last_price') are missing in the data."})
 
-        # Извлекување на секој 3-ти податок
-        dates = []
-        prices = []
-        for i, (date, price) in enumerate(stock_data):
-            if i % 3 == 0:
-                dates.append(date.strftime("%Y-%m-%d"))
-                prices.append(price)
+        # 🗓️ Конверзија на датумите
+        df['date'] = pd.to_datetime(df['date'], format="%d.%m.%Y", errors='coerce')
+        df = df.dropna(subset=['date'])
+
+        # 💵 Конверзија на цените во бројки
+        df['last_price'] = pd.to_numeric(
+            df['last_price'].astype(str)
+            .str.replace('.', '', regex=False)
+            .str.replace(',', '.', regex=False),
+            errors='coerce'
+        )
+        df = df.dropna(subset=['last_price'])
+
+        # 📅 Сортирање на податоците според датум
+        df = df.sort_values(by='date')
+
+        # ➗ Извлекување на секој 3-ти податок
+        df = df.iloc[::3]
+
+        # 📤 Подготвување на податоците за одговор
+        dates = df['date'].dt.strftime("%Y-%m-%d").tolist()
+        prices = df['last_price'].tolist()
 
         return JsonResponse({
             "dates": dates,
@@ -489,7 +503,8 @@ def predict_stock_prices(request, issuer_name):
             return JsonResponse({"error": "Model not found for the specified issuer."}, status=404)
 
         # 2. Вчитај го моделот
-        model = tf.keras.load_model(model_path)
+        #model = tf.keras.load_model(model_path)
+        model = tf.keras.models.load_model(model_path)
 
         # 3. Подготви податоци
         df = get_historical_data(issuer_name)
@@ -514,5 +529,4 @@ def predict_stock_prices(request, issuer_name):
 
     except Exception as e:
         return JsonResponse({"error": f"An error occurred during prediction: {str(e)}"}, status=500)
-
 

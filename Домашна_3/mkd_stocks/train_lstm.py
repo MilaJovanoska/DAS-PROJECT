@@ -25,6 +25,7 @@ def train_lstm_model(X_train, y_train, X_test, y_test, model_path):
     # 5. Создај папка за модели ако не постои
     os.makedirs(os.path.dirname(model_path), exist_ok=True)
 
+    print(f"Model path: {model_path}")
     # 6. Зачувување на моделот
     model.save(model_path)
 

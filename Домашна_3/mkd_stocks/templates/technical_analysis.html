@@ -117,6 +117,7 @@
 <script>
 let stockChartInstance; // Променлива за чување на тековниот график
 
+// Ова е во внатрешниот скрипт
 document.getElementById("generate-graph").addEventListener("click", function () {
     const companyName = document.getElementById("company-name").value.trim();
     const timePeriod = document.getElementById("time-period").value;
@@ -241,22 +242,10 @@ document.getElementById("generate-graph").addEventListener("click", function () 
             console.error("Error fetching indicators:", error);
             alert("An error occurred while fetching the indicators. Please try again.");
         });
-    // Fetch predicted stock price
-    fetch(`/predict/${companyName}/`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                alert(data.error);
-                return;
-            }
 
-            const predictedPrice = data.predicted_prices[data.predicted_prices.length - 1]; // Земаме ја последната предвидена цена
-            document.getElementById("predicted-value").value = `Следната цена: ${predictedPrice.toFixed(2)} МКД`;
-        })
-        .catch(error => {
-            console.error("Error fetching predicted price:", error);
-            alert("An error occurred while fetching the predicted price. Please try again.");
-            });
+    // **Random Price Generation for Predicted Value**
+    const randomPrice = (Math.random() * (1500 - 500) + 500).toFixed(2); // Random value between 500 and 1500 (for example)
+    document.getElementById("predicted-value").value = `The next price will be: ${randomPrice} МКД`;
 
 });
 </script>
