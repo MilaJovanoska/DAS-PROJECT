@@ -23,15 +23,15 @@ from django.db import models
 
 class Stock(models.Model):
     issuer = models.CharField(max_length=255, primary_key=True)
-    date = models.CharField(max_length=255)  # Оставено како CharField
-    last_price = models.CharField(max_length=255)  # Оставено како CharField
-    max = models.CharField(max_length=255)  # Оставено како CharField
-    min = models.CharField(max_length=255)  # Оставено како CharField
-    average = models.CharField(max_length=255)  # Оставено како CharField
-    percent_change = models.CharField(max_length=255)  # Оставено како CharField
-    quantity = models.CharField(max_length=255)  # Оставено како CharField
-    best_trade = models.CharField(max_length=255)  # Оставено како CharField
-    total_trade = models.CharField(max_length=255)  # Оставено како CharField
+    date = models.DateField()  # Change to DateField for actual date format
+    last_price = models.DecimalField(max_digits=10, decimal_places=2)  # Use DecimalField for prices
+    max = models.DecimalField(max_digits=10, decimal_places=2)  # Use DecimalField for prices
+    min = models.DecimalField(max_digits=10, decimal_places=2)  # Use DecimalField for prices
+    average = models.DecimalField(max_digits=10, decimal_places=2)  # Use DecimalField for average
+    percent_change = models.DecimalField(max_digits=5, decimal_places=2)  # Use DecimalField for percentages
+    quantity = models.IntegerField()  # Use IntegerField for quantity
+    best_trade = models.DecimalField(max_digits=10, decimal_places=2)  # Use DecimalField for trade amounts
+    total_trade = models.DecimalField(max_digits=15, decimal_places=2)  # Use DecimalField for total trade
 
     class Meta:
         db_table = 'stock_prices'
