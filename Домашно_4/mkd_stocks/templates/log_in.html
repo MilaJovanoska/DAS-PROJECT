@@ -13,9 +13,9 @@
 <div class="navbar">
     <img src="{% static 'images/background2.png' %}" alt="Logo" class="navbar-logo">
     <div class="nav-buttons">
-        <a href="{% url 'index.html' %}" class="nav-button">Home</a>
-        <a href="{% url 'sign_up.html' %}" class="nav-button nav-login">Sign up</a>
-        <a href="{% url 'contact.html' %}" class="nav-button">Contact</a>
+        <a href="{% url 'home' %}" class="nav-button">Home</a>
+        <a href="{% url 'sign_up' %}" class="nav-button nav-login">Sign up</a>
+        <a href="{% url 'contact' %}" class="nav-button">Contact</a>
     </div>
 </div>
 
@@ -26,16 +26,20 @@
         {% csrf_token %}
         <label for="email">Email</label>
         <input type="email" id="email" name="email" placeholder="Enter your email" required>
-
+        
         <label for="password">Password</label>
         <input type="password" id="password" name="password" placeholder="**********" required>
-
-        <button type="button" onclick="window.location.href='{% url 'stock_list' %}'">Log In</button>
+    
+        <button type="submit">Log In</button>
+    
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
     </form>
 
     <div class="existing-account">
         <p>Don't have an account?</p>
-        <a href="{% url 'sign_up.html' %}" class="signup-link">Sign up here</a>
+        <a href="{% url 'sign_up' %}" class="signup-link">Sign up here</a>
     </div>
 </div>
 

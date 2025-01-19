@@ -12,6 +12,11 @@ from .data_utils import get_historical_data, normalize_data, create_sequences
 from .train_lstm import train_lstm_model
 from sklearn.model_selection import train_test_split
 
+from django.contrib.auth import authenticate, login
+from django.shortcuts import redirect
+from django.contrib.auth.models import User
+from django.http import JsonResponse
+
 
 def home(request):
     return render(request, 'index.html')
@@ -262,6 +267,18 @@ def calculate_ama(prices, period=10):
 
 
 def login_view(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        password = request.POST['password']
+
+        # Authenticate the user
+        user = authenticate(request, username=email, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')  # Redirect to the home page (or wherever you want)
+        else:
+            return render(request, 'log_in.html', {'error': 'Invalid email or password'})
+
     return render(request, 'log_in.html')
 
 
