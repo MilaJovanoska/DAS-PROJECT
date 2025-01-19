@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About us - MKD Stock Spot</title>
+    <link rel="stylesheet" href="{% static 'css/about_us.css' %}">
+</head>
+<body>
+<header>
+    <nav class="navbar">
+        <div class="logo">
+            <a href="{% url 'index.html' %}">
+                <img src="{% static 'images/mkd_stock_spot_logo_green.png' %}" alt="MKD Stock Spot Logo">
+            </a>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="{% url 'index.html' %}">Home</a></li>
+            <li><a href="{% url 'about_us.html' %}">About us</a></li>
+            <li><a href="{% url 'stock_list' %}">News</a></li>
+            <li><a href="{% url 'sign_up.html' %}">Log in</a></li>
+            <li><a href="{% url 'contact.html' %}">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="container">
+    <div class="section">
+        <h2>About us</h2>
+        <p>MKD StockSpot is an advanced and innovative digital tool, specially developed for the Macedonian financial
+            market. Our platform provides centralized and efficient tracking of stocks and financial performance of
+            companies listed on the Macedonian Stock Exchange.
+            With a focus on accuracy and timeliness, MKD StockSpot offers investors and financial analysts reliable and
+            easy access to up-to-date and detailed data on stock movements and the performance of Macedonian
+            companies.</p>
+    </div>
+    <div class="section">
+        <h2>Our mission</h2>
+        <p>Our mission is to enhance the transparency of the Macedonian financial market by providing accurate,
+            up-to-date, and analytical financial data, enabling investors and analysts to make informed and rational
+            decisions. The platform aims to become a reliable source of financial information for all users, regardless
+            of their experience. We offer advanced analytical insights and indicators that help in understanding market
+            trends and making smart investment decisions.</p>
+    </div>
+</main>
+<footer class="footer">
+    <div class="footer-content">
+        <p>© 2024 MKD Stock Spot Inc. All Rights Reserved.</p>
+        <div class="social-icons">
+            <a href="https://www.instagram.com/mkd_stock_spot/" aria-label="Instagram" target="_blank">
+                <img src="{% static 'images/instagram_logo.png' %}" alt="Instagram">
+            </a>
+
+            <a href="#" aria-label="Facebook">
+                <img src="{% static 'images/facebook_logo.png' %}" alt="Facebook">
+            </a>
+            <a href="#" aria-label="Twitter">
+                <img src="{% static 'images/twitter_logo.png' %}" alt="Twitter">
+            </a>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
