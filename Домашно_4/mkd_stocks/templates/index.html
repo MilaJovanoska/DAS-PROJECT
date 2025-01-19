@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home page</title>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+</head>
+<body>
+<header>
+    <nav class="navbar">
+
+        <div class="logo">
+            <a href="{% url 'index.html' %}">
+                <img src="{% static 'images/mkd_stock_spot_logo.png' %}" alt="MKD Stock Spot Logo">
+            </a>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="{% url 'index.html' %}">Home</a></li>
+            <li><a href="{% url 'about_us.html' %}">About us</a></li>
+            <li><a href="{% url 'sign_up.html' %}">News</a></li>
+            <li><a href="{% url 'sign_up.html' %}">Sign up</a></li>
+            <li><a href="{% url 'contact.html' %}">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+<section class="hero-section">
+    <div class="hero-text">
+        <h1>Welcome to the official website of <br><strong>MKD Stock Spot</strong></h1>
+        <p>MKD StockSpot is an advanced and innovative digital tool specifically developed for the Macedonian financial market, enabling centralized and efficient tracking of stock performance and financial metrics of companies listed on the Macedonian Stock Exchange.</p>
+        <a href="{% url 'about_us.html' %}" class="btn">Learn more</a>
+    </div>
+    <div class="hero-image">
+        <img src="{% static 'images/over_background.png' %}" alt="Coins Image">
+    </div>
+</section>
+<footer class="footer">
+    <div class="footer-content">
+        <p>© 2024 MKD Stock Spot Inc. All Rights Reserved.</p>
+        <div class="social-icons">
+            <a href="#" aria-label="Instagram">
+                <img src="{% static 'images/instagram_logo.png' %}" alt="Instagram" />
+            </a>
+            <a href="#" aria-label="Facebook">
+                <img src="{% static 'images/facebook_logo.png' %}" alt="Facebook" />
+            </a>
+            <a href="#" aria-label="Twitter">
+                <img src="{% static 'images/twitter_logo.png' %}" alt="Twitter" />
+            </a>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
+

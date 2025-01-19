@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Data</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #59a8c7;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 10px;
+            height: 100px;
+            background-color: #59a8c7;
+        }
+
+        .logo img {
+            height: 170px;
+        }
+
+        .menu {
+            list-style-type: none;
+            display: flex;
+            gap: 10px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .menu li a {
+            text-decoration: none;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 8px 15px;
+            border: 2px solid white;
+            border-radius: 25px;
+            transition: 0.3s;
+        }
+
+        .menu li a:hover {
+            background-color: white;
+            color: #1B4965;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 10px;
+            gap: 10px;
+        }
+
+        .search-container input, .search-container button {
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .search-container button {
+            background-color: #1B4965;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .search-container button:hover {
+            background-color: white;
+            color: #1B4965;
+        }
+
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        thead th {
+            position: sticky;
+            top: 0;
+            background-color: #1B4965;
+            color: white;
+            z-index: 1;
+        }
+
+        tr:nth-child(even) {
+            background-color: #2D5D7E;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #3f8eae;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+            color: #2D5D7E;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        #chartContainer {
+            width: 90%;
+            margin: 20px auto;
+        }
+
+        .button-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .button-container button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button-container .button-1 {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        .button-container .button-1:hover {
+            background-color: #0056b3;
+        }
+
+        .button-container .button-2 {
+            background-color: #28A745;
+            color: white;
+        }
+
+        .button-container .button-2:hover {
+            background-color: #1e7a33;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <div class="logo">
+        <img src="{% static 'images/mkd_stock_spot_logo.png' %}" alt="MKD Stock Spot Logo">
+    </div>
+    <ul class="menu">
+        <li><a href="{% url 'index.html' %}" class="active">Home</a></li>
+        <li><a href="{% url 'about_us.html' %}">About us</a></li>
+        <li><a href="{% url 'stock_list' %}">News</a></li>
+        <li><a href="{% url 'sign_up.html' %}">Sign up</a></li>
+        <li><a href="{% url 'contact.html' %}">Contact</a></li>
+    </ul>
+</nav>
+<h1>Stock Prices</h1>
+
+<!-- Форма за филтрирање според issuer и датум -->
+<form class="search-container" method="get" action="">
+    <input type="text" name="query" value="{{ query }}" placeholder="Search by issuer...">
+    <input type="date" name="date" value="{{ date }}" placeholder="Date">
+    <button type="submit">Search</button>
+</form>
+
+<!-- Табела со податоци -->
+<table>
+    <thead>
+        <tr>
+            <th>Issuer</th>
+            <th>Date</th>
+            <th>Last Price</th>
+            <th>Max</th>
+            <th>Min</th>
+            <th>Average</th>
+            <th>Percent Change</th>
+            <th>Quantity</th>
+            <th>Best Trade</th>
+            <th>Total Trade</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if stocks %}
+            {% for stock in stocks %}
+            <tr>
+                <td>{{ stock.issuer }}</td>
+                <td>{{ stock.date }}</td>
+                <td>{{ stock.last_price }}</td>
+                <td>{{ stock.max }}</td>
+                <td>{{ stock.min }}</td>
+                <td>{{ stock.average }}</td>
+                <td>{{ stock.percent_change }}</td>
+                <td>{{ stock.quantity }}</td>
+                <td>{{ stock.best_trade }}</td>
+                <td>{{ stock.total_trade }}</td>
+            </tr>
+            {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan="10">No results found</td>
+        </tr>
+        {% endif %}
+    </tbody>
+</table>
+
+<!-- Графикон -->
+<div id="chartContainer">
+    <canvas id="stockChart"></canvas>
+</div>
+
+<!-- Копчиња -->
+<div class="button-container">
+    <button class="button-1" onclick="window.location.href='{% url 'technical_analysis.html' %}'">Technical Analysis</button>
+    <button class="button-2" onclick="window.location.href='{% url 'nlp_analysis.html' %}'">NLP Analysis</button>
+</div>
+
+<script>
+    const graphData = {
+        dates: [{% for stock in graph_data %}"{{ stock.date }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
+        prices: [{% for stock in graph_data %}{{ stock.last_price }}{% if not forloop.last %}, {% endif %}{% endfor %}]
+    };
+
+    const ctx = document.getElementById('stockChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: graphData.dates,
+            datasets: [{
+                label: 'Stock Prices',
+                data: graphData.prices,
+                borderColor: '#FFD700',
+                backgroundColor: 'rgba(0, 123, 255, 0.2)',
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `Price: ${context.raw}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: { ticks: { color: 'white' } },
+                y: { ticks: { color: 'white' } }
+            }
+        }
+    });
+</script>
+</body>
+</html>
